@@ -8,4 +8,4 @@ on:
 
 jobs:
   deploy:
-    uses: RempelOliveira/ArgoCD.Deployment/.github/workflows/deploy.yml@main
+    uses: Artbsides/ArgoCD.Deployment/.github/workflows/deploy.yml@main
