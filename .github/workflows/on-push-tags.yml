@@ -10,3 +10,5 @@ jobs:
   deploy:
     uses: Artbsides/ArgoCD.Deployment/.github/workflows/deploy.yml@main
     secrets: inherit
+    with:
+     app-name: cart-api
