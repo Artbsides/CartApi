@@ -9,4 +9,3 @@ on:
 jobs:
   deploy:
     uses: RempelOliveira/ArgoCD.Deployment/.github/workflows/deploy.yml@main
-    secrets: inherit
