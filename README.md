@@ -134,7 +134,7 @@ Rota disponível para remover carrinhos de compras e todos os seus produtos.
 
 # CI/CD
 
-O repositório desta aplicação foi configurado para que no push de novs commits seja disparado o workflow responsável por realizar testes e análise de código, caso algumas das ações falhe, não será possível realizar o merge da branch do PR com a main.
+O repositório desta aplicação foi configurado para que no push de novos commits seja disparado o workflow responsável por realizar testes e análise de código, caso algumas das ações falhe, não será possível realizar o merge da branch do PR com a main.
 
 Para realizar deploy, seja em staging ou production, é necessária a criação de tags para que o (workflow compartilhado)[https://github.com/Artbsides/ArgoCD.Deployment/tree/main/.github/workflows] seja disparado, porém é necessário seguir alguns passos antes disso, tal como descrito logo abaixo.
 
