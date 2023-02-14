@@ -8,27 +8,27 @@ Para fins de armazenamento e consulta, o banco de dados utilizado por este servi
 
 # Postman
 
-Para utilizar os serviços sem a implementação de uma aplicação front-end, é necessário executar as rotas disponíveis via curl ou algum software de terceiros. Uma cópia da collection contendo exemplos de execução para uso no **Postman** pode ser importada através do arquivo ```postman-cart-api-collection.json```.
+Para utilizar os serviços sem a implementação de uma aplicação front-end, é necessário executar as rotas disponíveis via curl ou algum software de terceiros. Uma cópia da collection contendo exemplos de execução para uso no **Postman** pode ser importada através do arquivo `postman-cart-api-collection.json`.
 
-Para que todas as rotas fundionem corretamente, o serviço responsável pelos dados dos produtos deve estar disponível, como ele ainda não foi desenvolvido, é necessário utilizá-lo de forma mockada através da importação do arquivo ```postman-products-api-collection.json```.
+Para que todas as rotas fundionem corretamente, o serviço responsável pelos dados dos produtos deve estar disponível, como ele ainda não foi desenvolvido, é necessário utilizá-lo de forma mockada através da importação do arquivo `postman-products-api-collection.json`.
 
 Talvez algumas variáveis precisem ser criadas no Postman para que as requests funcionem como o esperado, são elas:
 
-```
+``` code
 {{cart-api}}
 
 var:   cart-api
 value: http://localhost:5000
 ```
 
-```
+``` code
 {{products-api}}
 
 var:   products-api
 value: https://3e50cd27-cf70-4c8b-89fd-869ec742555b.mock.pstmn.io
 ```
 
-```
+``` code
 {{X-API-KEY}}
 
 var:   X-API-KEY
@@ -41,25 +41,25 @@ value: PMAK-6137dfa173453700461a33da-8ecae3393710f0ceaff58d84c120d7cb90
 
 Para instalar a aplicação, basta rodar o comando abaixo.
 
-```
+``` code
 $ make install
 ```
 
 O comando **make install** é responsável pela execução de todas as pendências do serviço, ao final, testes automatizados serão executados.
 
-Caso seja necessário executar comandos individualmente, basta utilizar o comando ```make <option>```.
+Caso seja necessário executar comandos individualmente, basta utilizar o comando `make <option>`.
 
-Para exibir a lista de comandos disponníveis, basta executar o comando ```make```.
+Para exibir a lista de comandos disponníveis, basta executar o comando `make`.
 
 # Inicialização
 
 Para inicializar o serviço, basta executar o comando abaixo.
 
-```
+``` code
 $ make run
 ```
 
-Ao final da inicialização, o serviço estará disponível no seguinte endereço e porta ```http://localhost:5000```
+Ao final da inicialização, o serviço estará disponível no seguinte endereço e porta `http://localhost:5000`
 
 # Rotas
 
@@ -69,7 +69,7 @@ Rota disponível para inserir o primeiro produto ao carrinho de compras ainda n�
 
 Dados de entrada:
 
-```
+``` code
 {
     "product_uuid": <:string>,
     "price": <:float>,
@@ -83,7 +83,7 @@ Rota disponível para inserir produtos em um carrinho de compras já existente.
 
 Dados de entrada:
 
-```
+``` code
 {
     "product_uuid": <:string>,
     "price": <:float>,
@@ -97,7 +97,7 @@ Rota disponível para atualizar dados dos produtos inseridos em um carrinho de c
 
 Dados de entrada:
 
-```
+``` code
 {
     "price": <:float>,
     "amount": <:int>
@@ -114,7 +114,7 @@ Rota disponível para inserir cupom de desconto em um carrinho de compras.
 
 Dados de entrada:
 
-```
+``` code
 {
     "code": <:string>
 }
@@ -131,6 +131,18 @@ Rota disponível para exibição do carrinho de compras, detalhes dos produtos i
 - DELETE /v1/cart/:cart_id
 
 Rota disponível para remover carrinhos de compras e todos os seus produtos.
+
+# Mnitoramento
+
+Para monitorar o estado da aplicação, a rota `/metrics` foi implementada a fim de ser usada pelo Prometheus e disponibilizadas através de dashboards no Grafana. LEmbrando que esta rota é protegida por autenticação composta por usuário e sehna.
+
+Para rodar os serviços acima localmente, basta inicializá-los através do comando abaixo.
+
+``` code
+$ make monitoring
+```
+
+Para acessar o Prometheus, basta utilizar a url http://localhost:3000, quanto ao Grafana, utilize a url http://localhost:3001.
 
 # CI/CD
 
@@ -149,8 +161,11 @@ Para maiores dealhes a respeito das dependências para relazação do depoy ou a
 - [Python](https://www.python.org)
 - [MongoDB](https://www.mongodb.com)
 - [Docker](https://www.docker.com)
+- [Prometheus](https://prometheus.io)
+- [Grafana](https://grafana.com)
 - [Postman](https://www.postman.com)
 
 # Melhorias
 
 - Implementar ErrorHandler para tratamento de erros.
+- Logar ErrorHandler em ferramenta de terceiros.

@@ -68,7 +68,7 @@ delete-tag:  ##
 	@git tag -d $(tag) && \
 	  git push origin :refs/tags/$(tag)
 
-monitoring: -B  ## Run prometheus
+monitoring: -B  ## Run prometheus and grafana
 	@docker-compose up -d prometheus \
 	  grafana
 
