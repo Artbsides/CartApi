@@ -1,5 +1,3 @@
-⛔️ DEPRECATED - Movido para [CartApi](https://github.com/Artbsides/CartApi).
-
 # Cart Api
 
 Serviço disponível para o gerenciamento de dados dos carrinhos de compras em um e-commerce.
