@@ -136,13 +136,23 @@ Rota disponível para remover carrinhos de compras e todos os seus produtos.
 
 Para monitorar o estado da aplicação, a rota `/metrics` foi implementada a fim de ser usada pelo **Prometheus** e disponibilizadas através de dashboards no **Grafana**. Lembrando que esta rota é protegida por autenticação configurável através dos arquivos de variáveis de ambiente.
 
-Para rodar os serviços acima localmente, basta inicializá-los através do comando abaixo.
+Para inicializar localmente os serviços acima, basta utilizar o comando abaixo.
 
 ``` code
 $ make monitoring
 ```
 
-Para acessar o **Prometheus**, basta utilizar a url http://localhost:3000, quanto ao **Grafana**, utilize a url http://localhost:3001.
+Após a completa inicialização dos serviços de monitoramente, eles estarão disponíveis nas seguintes urls.
+
+``` code
+Prometheus
+http://localhost:3000
+```
+
+``` code
+Grafana
+http://localhost:3001
+```
 
 # CI/CD
 
