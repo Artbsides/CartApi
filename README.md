@@ -134,7 +134,7 @@ Rota disponível para remover carrinhos de compras e todos os seus produtos.
 
 # Mnitoramento
 
-Para monitorar o estado da aplicação, a rota `/metrics` foi implementada a fim de ser usada pelo Prometheus e disponibilizadas através de dashboards no Grafana. LEmbrando que esta rota é protegida por autenticação composta por usuário e sehna.
+Para monitorar o estado da aplicação, a rota `/metrics` foi implementada a fim de ser usada pelo **Prometheus** e disponibilizadas através de dashboards no **Grafana**. Lembrando que esta rota é protegida por autenticação configurável através dos arquivos de variáveis de ambiente.
 
 Para rodar os serviços acima localmente, basta inicializá-los através do comando abaixo.
 
@@ -142,7 +142,7 @@ Para rodar os serviços acima localmente, basta inicializá-los através do coma
 $ make monitoring
 ```
 
-Para acessar o Prometheus, basta utilizar a url http://localhost:3000, quanto ao Grafana, utilize a url http://localhost:3001.
+Para acessar o **Prometheus**, basta utilizar a url http://localhost:3000, quanto ao **Grafana**, utilize a url http://localhost:3001.
 
 # CI/CD
 
@@ -154,7 +154,7 @@ O deploy em staging é realizado apenas quando a versão da imagem da alicação
 
 O deploy em production segue o mesmo principio, sendo assim, antes do merge da branch do PR com a main, certifique-se de alterar a versão da imagem da aplicação no arquivo [.secrets.yml](.k8s/production/secrets/.secrets.yml) de production, feito isso, faça o merge, aguarde os resutados dos testes e crie um `relase` a partir de uma nova tag de acordo com a versão setada previamente.
 
-Para maiores dealhes a respeito das dependências para relazação do depoy ou ainda, como visualizar a aplicação devidamente aplicada, acesse o seguinte [repositório](https://github.com/Artbsides/ArgoCD.Deployment).
+Para maiores detalhes a respeito das dependências para realização do deploy ou como visualizar a aplicação devidamente aplicada, acesse o seguinte [repositório](https://github.com/Artbsides/ArgoCD.Deployment).
 
 # Principais Tecnologias Utilizadas
 
