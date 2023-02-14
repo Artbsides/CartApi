@@ -43,20 +43,22 @@ run:  ## Run api
 run-debug:  ## Run api in debugger mode
 	@docker-compose run --rm --service-ports cart_api flask run
 
-encrypt-secrets:  ## Encrypt secret vars
-	@sops -e -i --encrypted-regex "^(data|stringData)$$" \
-		--age $$(cat ~/.sops/age/key.txt | grep -oP "public key: \K(.*)") $(file)
-
-decrypt-secrets:  ## Decrypt secret vars
-	@export SOPS_AGE_KEY_FILE=~/.sops/age/key.txt && \
-	    sops -d -i $(file)
-
-encrypt-gpg-secrets:  ## Encrypt secret vars gpg
+encrypt-secrets:  ## Encrypt secrets. type=gpg file=.k8s/staging|production/secrets/.secrets
+ifeq ("$(type)", "gpg")
 	@sops -e -i --encrypted-regex "^(data|stringData)$$" \
 		-p "$$(gpg --list-secret-keys $$(kubectl config get-contexts -o name) | sed -n 2p | xargs)" $(file)
 
-decrypt-gpg-secrets:  ## Decrypt secret vars gpg
+else
+	@echo "==== Type not found"
+endif
+
+decrypt-secrets:  ## Decrypt secrets. type=gpg file=.k8s/staging|production/secrets/.secrets
+ifeq ("$(type)", "gpg")
 	@sops -d -i $(file)
+
+else
+	@echo "==== Type not found"
+endif
 
 create-tag:  ##
 	@git tag $(tag) && \
