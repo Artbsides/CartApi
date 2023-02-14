@@ -10,5 +10,3 @@ jobs:
   reusable-workflows:
     uses: Artbsides/ArgoCD.Deployment/.github/workflows/on-workflow-call.yml@main
     secrets: inherit
-    with:
-     app-name: cart-api
