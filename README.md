@@ -132,6 +132,18 @@ Rota disponível para exibição do carrinho de compras, detalhes dos produtos i
 
 Rota disponível para remover carrinhos de compras e todos os seus produtos.
 
+# CI/CD
+
+O repositório desta aplicação foi configurado para que no on-push o workflow [on-push](.github/workflows/on-push.yml) que é responsável por realizar testes e análise de código seja disparado, caso algumas das ações falhe, não será possível realizar o merge da branch do PR com a main.
+
+Para realização de deploy, seja em staging ou production, é necessária a criação de tags para que o workflow [on-push-tags](.github/workflows/on-push-tags.yml) seja disparado, porém é necessário alterar a versão da imagem da aplicação nos arquivos de deploy, tal como descrito logo abaixo.
+
+O deploy em staging é realizado apenas quando a versão da imagem da alicação for alterada no arquivo [.secrets.yml](.k8s/staging/secrets/.secrets.yml) de staging, após a alteração, é necessário gerar uma nova tag da mesma versão a partir da branch do PR.
+
+O deploy em production segue o mesmo principio, sendo assim, antes do merge da branch do PR com a main, certifique-se de alterar a versão da imagem da aplicação no arquivo [.secrets.yml](.k8s/production/secrets/.secrets.yml) de production, feito isso, faça o merge, aguarde os resutados dos testes e crie um `relase` a partir de uma nova tag de acordo com a versão setada previamente.
+
+Para maiores dealhes a respeito das dependências para relazação do depoy ou ainda, como visualizar a aplicação devidamente aplicada, acesse o seguinte [repositório](https://github.com/Artbsides/ArgoCD.Deployment).
+
 # Principais Tecnologias Utilizadas
 
 - [Python](https://www.python.org)
@@ -142,4 +154,3 @@ Rota disponível para remover carrinhos de compras e todos os seus produtos.
 # Melhorias
 
 - Implementar ErrorHandler para tratamento de erros.
-- Implementar CI/CD
