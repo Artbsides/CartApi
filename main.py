@@ -17,6 +17,8 @@ from debugger import debugger
 from app.routes import load_routes
 
 
+print(os.getenv("FLASK_DEBUG"))
+
 sentry_sdk.init(
     dsn=os.getenv("SENTRY_DSN"),
     debug=int(os.getenv("FLASK_DEBUG")),
