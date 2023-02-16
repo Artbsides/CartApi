@@ -7,7 +7,7 @@ def debugger(debug_port):
         debugpy.listen(("0.0.0.0", int(debug_port)))
 
         print("")
-        print("⏳ VS Code debugger can now be attached", flush=True)
+        print("⏳ VS Code debugger can now be attached, port={}".format(debug_port), flush=True)
 
         debugpy.wait_for_client()
 

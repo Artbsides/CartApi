@@ -1,5 +1,6 @@
 import os
 import json
+import sentry_sdk
 
 from flask import Flask
 from flask_cors import CORS
@@ -7,20 +8,35 @@ from flask_restful import Api
 from flask_mongoengine import MongoEngine
 from flask_httpauth import HTTPBasicAuth
 
+from sentry_sdk import capture_exception
+from sentry_sdk.integrations.flask import FlaskIntegration
+
 from prometheus_flask_exporter import RESTfulPrometheusMetrics
 
 from debugger import debugger
 from app.routes import load_routes
 
 
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    debug=int(os.getenv("FLASK_DEBUG")),
+    release="0.0.1-staging",
+    traces_sample_rate=1.0,
+    integrations=[
+        FlaskIntegration(),
+    ]
+)
+
+
 app = Flask(__name__)
 app.config["MONGODB_HOST"] = f'{os.getenv("MONGODB_URL")}/{os.getenv("MONGODB_NAME")}'
 
-restful_api = Api(app)
+restful_api = Api(app,
+    default_mediatype="application/json")
 
 
-if os.getenv("FLASK_DEBUG") == "True":
-    debugger(os.getenv("FLASK_DEBUG_PORT"))
+if os.getenv("FLASK_DEBUGGER").lower() == "true":
+    debugger(os.getenv("FLASK_DEBUGGER_PORT"))
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 MongoEngine(app)
@@ -37,7 +53,13 @@ def verify_credentials(username, password):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return json.dumps({"error": str(e)}), e.code
+    return {"error": str(e)}, 400
+
+@app.errorhandler(Exception)
+def exceptions(e):
+    capture_exception(e)
+
+    return {"error": str(e)}, getattr(e, "code", 500)
 
 
 load_routes(restful_api)

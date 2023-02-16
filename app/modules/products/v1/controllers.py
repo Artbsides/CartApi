@@ -15,15 +15,13 @@ from app.modules.products.v1.serializers import ProductsSerializers, ProductSeri
 class Products(Resource):
     @validate_data(ProductsSerializers.input_data())
     def post(self, cart_id):
-        data = request.data
-
         try:
             cart = CartRepository.find_one(id=cart_id)
 
             if not cart:
                 return {"errors": "Cart not found"}, 404
 
-            ProductRepository(**merge_attrs(data, {
+            ProductRepository(**merge_attrs(request.data, {
                 "cart": cart})).save()
 
             products = ProductRepository.find(cart=cart.id)
@@ -32,38 +30,26 @@ class Products(Resource):
             if isinstance(e, NotUniqueError):
                 return {"errors": "Product already added"}, 409
 
-            return {"errors": str(e)}, 500
-
         return marshal({"id": cart.id, "products": products}, ProductsSerializers.output_data()), 201
 
 class Product(Resource):
     @validate_data(ProductSerializers.input_data())
     def patch(self, cart_id, product_id):
-        data = request.data
+        product = ProductRepository.find_one(cart=cart_id, id=product_id)
 
-        try:
-            product = ProductRepository.find_one(cart=cart_id, id=product_id)
+        if not product:
+            return {"errors": "Product not found"}, 404
 
-            if not product:
-                return {"errors": "Product not found"}, 404
-
-            product.update(**data)
-
-        except Exception as e:
-            return {"errors": str(e)}, 500
+        product.update(**request.data)
 
         return None, 204
 
     def delete(self, cart_id, product_id):
-        try:
-            product = ProductRepository.find_one(cart=cart_id, id=product_id)
+        product = ProductRepository.find_one(cart=cart_id, id=product_id)
 
-            if not product:
-                return {"errors": "Product not found"}, 404
+        if not product:
+            return {"errors": "Product not found"}, 404
 
-            product.delete()
-
-        except Exception as e:
-            return {"errors": str(e)}, 500
+        product.delete()
 
         return None, 204

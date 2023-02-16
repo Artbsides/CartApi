@@ -1,6 +1,19 @@
-/.vscode
+#
+# IGNORE
+#
+
 __pycache__/
- *.pyc
+*.pyc
+
 .python-version
 .coverage
+
 htmlcov/
+
+.vscode/*
+
+#
+# IGNORE EXCEPTIONS
+#
+
+!.vscode/launch.json

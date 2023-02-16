@@ -14,37 +14,27 @@ from app.modules.coupons.v1.serializers import CouponSerializers
 class Coupon(Resource):
     @validate_data(CouponSerializers.input_data())
     def put(self, cart_id):
-        data = request.data
+        cart = CartRepository.find_one(id=cart_id)
 
-        try:
-            cart = CartRepository.find_one(id=cart_id)
+        if not cart:
+            return {"errors": "Cart not found"}, 404
 
-            if not cart:
-                return {"errors": "Cart not found"}, 404
+        coupon = CouponRepository.find_one(
+            code=request.data["code"], expires_at__gte=datetime.utcnow())
 
-            coupon = CouponRepository.find_one(
-                code=data["code"], expires_at__gte=datetime.utcnow())
+        if not coupon:
+            return {"errors": "Coupon expired or not found"}, 404
 
-            if not coupon:
-                return {"errors": "Coupon expired or not found"}, 404
-
-            cart.update(discount_coupon=coupon)
-
-        except Exception as e:
-            return {"errors": str(e)}, 500
+        cart.update(discount_coupon=coupon)
 
         return marshal(coupon, CouponSerializers.output_data()), 201
 
     def delete(self, cart_id):
-        try:
-            cart = CartRepository.find_one(id=cart_id)
+        cart = CartRepository.find_one(id=cart_id)
 
-            if not cart:
-                return {"errors": "Cart not found"}, 404
+        if not cart:
+            return {"errors": "Cart not found"}, 404
 
-            cart.update(unset__discount_coupon=True)
-
-        except Exception as e:
-            return {"errors": str(e)}, 500
+        cart.update(unset__discount_coupon=True)
 
         return None, 204
