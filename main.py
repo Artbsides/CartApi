@@ -19,7 +19,7 @@ from app.routes import load_routes
 
 sentry_sdk.init(
     dsn=os.getenv("SENTRY_DSN"),
-    debug=True,
+    debug=int(os.getenv("FLASK_DEBUG")),
     release="0.0.1-staging",
     traces_sample_rate=1.0,
     integrations=[
