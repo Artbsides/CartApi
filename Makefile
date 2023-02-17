@@ -1,3 +1,5 @@
+.ONESHELL:
+
 SHELL  = /bin/bash
 PYTHON = /usr/bin/python3
 
@@ -45,25 +47,20 @@ run:  ## Run api
 run-debug:  ## Run api in debugger mode
 	@docker-compose run --rm --service-ports cart_api flask run
 
-encrypt-secrets:  ## Encrypt secrets. type=gpg environment=staging|production
-ifeq ("$(type)", "gpg")
-	@sops -e -i --encrypted-regex "^(data|stringData)$$" \
-		-p "$$(gpg --list-secret-keys $$(kubectl config get-contexts -o name) | sed -n 2p | xargs)" .k8s/$(environment)/secrets/.secrets.yml
+encrypt-secrets:  ## Encrypt secrets. environment=staging|production
+	@SECRETS_PATH=".k8s/$(environment)/secrets"
+	@SECRETS_PUBLIC_KEY="$$(cat $$SECRETS_PATH/.sops.yml | awk "/age:/" | sed "s/.*: *//" | xargs -d "\r")"
+
+	@sops -e -i --encrypted-regex "^(data|stringData)$$" -a $$SECRETS_PUBLIC_KEY \
+	  $$SECRETS_PATH/.secrets.yml
 
 	@echo "==== Ok"
 
-else
-	@echo "==== Type not found"
-endif
+decrypt-secrets:  ## Decrypt secrets. environment=staging|production
+	@SECRETS_KEY="$$(kubectl get secret sops-age --namespace argocd -o yaml | awk "/sops-age.txt:/" | sed "s/.*: *//" | base64 -d)"
 
-decrypt-secrets:  ## Decrypt secrets. type=gpg environment=staging|production
-ifeq ("$(type)", "gpg")
-	@sops -d -i .k8s/$(environment)/secrets/.secrets.yml && \
+	@SOPS_AGE_KEY=$$SECRETS_KEY sops -d -i .k8s/$(environment)/secrets/.secrets.yml && \
 	  echo "==== Ok"
-
-else
-	@echo "==== Type not found"
-endif
 
 create-tag:  ##
 	@git tag $(tag) && \
