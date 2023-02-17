@@ -25,6 +25,7 @@ services:
       FLASK_DEBUGGER_PORT: ${FLASK_DEBUGGER_PORT}
       MONGODB_NAME: ${MONGODB_NAME}
       MONGODB_URL: ${MONGODB_URL}
+      SENTRY_DSN: ${SENTRY_DSN}
       X_API: ${X_API}
       X_API_KEY: ${X_API_KEY}
     depends_on:

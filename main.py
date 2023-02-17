@@ -1,5 +1,4 @@
 import os
-import json
 import sentry_sdk
 
 from flask import Flask
