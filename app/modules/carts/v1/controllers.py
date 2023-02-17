@@ -13,51 +13,37 @@ from app.modules.carts.v1.serializers import CartSerializers
 
 class Cart(Resource):
     def get(self, cart_id):
-        try:
-            cart = CartRepository.find_one(id=cart_id)
+        cart = CartRepository.find_one(id=cart_id)
 
-            if not cart:
-                return {"errors": "Cart not found"}, 404
+        if not cart:
+            return {"errors": "Cart not found"}, 404
 
-            cart.products = ProductServices.retrieve_products(
-                ProductRepository.find(cart=cart_id))
+        cart.products = ProductServices.retrieve_products(
+            ProductRepository.find(cart=cart_id))
 
-            cart.total = sum(product["price"] * product["amount"] for product in cart.products)
+        cart.total = sum(product["price"] * product["amount"] for product in cart.products)
 
-            if cart.discount_coupon:
-                cart.discount = cart.discount_coupon.discount
-                cart.subtotal = cart.total - (
-                    cart.discount.value * cart.total / 100 if cart.discount.type == "percentage" else cart.discount.value
-                )
-
-        except Exception as e:
-            return {"errors": str(e)}, 500
+        if cart.discount_coupon:
+            cart.discount = cart.discount_coupon.discount
+            cart.subtotal = cart.total - (
+                cart.discount.value * cart.total / 100 if cart.discount.type == "percentage" else cart.discount.value
+            )
 
         return marshal(cart, CartSerializers.output_data(complete_resource=True)), 200
 
     @validate_data(CartSerializers.input_data())
     def post(self):
-        data = request.data
-
-        try:
-            product = ProductRepository(
-                **merge_attrs(data, {"cart": CartRepository().save()})).save()
-
-        except Exception as e:
-            return {"errors": str(e)}, 500
+        product = ProductRepository(
+            **merge_attrs(request.data, {"cart": CartRepository().save()})).save()
 
         return marshal({"id": product.cart.id, "products": [product]}, CartSerializers.output_data()), 201
 
     def delete(self, cart_id):
-        try:
-            cart = CartRepository.find_one(id=cart_id)
+        cart = CartRepository.find_one(id=cart_id)
 
-            if not cart:
-                return {"errors": "Cart not found"}, 404
+        if not cart:
+            return {"errors": "Cart not found"}, 404
 
-            cart.delete()
-
-        except Exception as e:
-            return {"errors": str(e)}, 500
+        cart.delete()
 
         return None, 204
