@@ -28,7 +28,9 @@ sentry_sdk.init(
 
 
 app = Flask(__name__)
+
 app.config["MONGODB_HOST"] = f'{os.getenv("MONGODB_URL")}/{os.getenv("MONGODB_NAME")}'
+app.config["PROPAGATE_EXCEPTIONS"] = True
 
 restful_api = Api(app,
     default_mediatype="application/json")
