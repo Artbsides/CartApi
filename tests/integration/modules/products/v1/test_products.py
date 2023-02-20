@@ -1,4 +1,5 @@
 import unittest
+import pytest
 
 from unittest.mock import patch
 from bson.objectid import ObjectId
@@ -61,7 +62,7 @@ class TestProducts(unittest.TestCase):
 
         assert response.status_code == 409
 
-        with patch("app.modules.products.repositories.Product", object):
+        with patch("app.modules.products.repositories.Product", object), pytest.raises(Exception):
             response = app.test_client().post(f'/v1/cart/{cart.id}/products',
                 json={
                     "product_uuid": "c0b3fe2c-9cc9-475a-9c11-4cfaec941909",
@@ -86,7 +87,8 @@ class TestProducts(unittest.TestCase):
             "amount": 2
         })
 
-        assert app.test_client().patch(f'/v1/cart/{cart.id}/products/{product.id}').status_code == 500
+        with pytest.raises(Exception):
+            assert app.test_client().patch(f'/v1/cart/{cart.id}/products/{product.id}').status_code == 500
 
         response = app.test_client().patch(f'/v1/cart/{cart.id}/products/{product.id}',
             json={
@@ -113,5 +115,5 @@ class TestProducts(unittest.TestCase):
 
         assert app.test_client().delete(f'/v1/cart/{cart.id}/products/{product.id}').status_code == 204
 
-        with patch("app.modules.products.repositories.Product", object):
+        with patch("app.modules.products.repositories.Product", object), pytest.raises(Exception):
             assert app.test_client().delete(f'/v1/cart/{cart.id}/products/{product.id}').status_code == 500

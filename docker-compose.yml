@@ -30,8 +30,6 @@ services:
       SENTRY_DSN: ${SENTRY_DSN}
       X_API: ${X_API}
       X_API_KEY: ${X_API_KEY}
-    depends_on:
-      - mongodb
 
   cart_api:
     <<: *app
@@ -39,14 +37,16 @@ services:
     ports:
       - ${FLASK_RUN_PORT}:${FLASK_RUN_PORT}
       - ${FLASK_DEBUGGER_PORT}:${FLASK_DEBUGGER_PORT}
+    depends_on:
+      - mongodb
     volumes:
       - ./:/app
 
   runner:
     <<: *app
-    env_file:
-      - .env
     command: /bin/bash
+    volumes:
+      - ./:/app
 
   prometheus:
     image: prom/prometheus:v2.42.0
@@ -60,7 +60,7 @@ services:
     image: grafana/grafana:9.3.6
     container_name: cart-api_grafana
     environment:
-      GF_AUTH_ANONYMOUS_ENABLED: true
+      GF_AUTH_ANONYMOUS_ENABLED: 1
       GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
     volumes:
       - ./.monitoring/grafana/prometheus-datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
