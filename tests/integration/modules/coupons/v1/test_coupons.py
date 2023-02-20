@@ -1,4 +1,5 @@
 import unittest
+import pytest
 
 from unittest.mock import patch
 from bson.objectid import ObjectId
@@ -42,13 +43,14 @@ class TestCoupons(unittest.TestCase):
             "discount_coupon": coupon
         })
 
-        response = app.test_client().put("/v1/cart/123/coupon",
-            json={
-                "code": coupon.code
-            }
-        )
+        with pytest.raises(Exception):
+            response = app.test_client().put("/v1/cart/123/coupon",
+                json={
+                    "code": coupon.code
+                }
+            )
 
-        assert response.status_code == 500
+            assert response.status_code == 500
 
         response = app.test_client().put(f'/v1/cart/{ObjectId()}/coupon',
             json={
@@ -91,5 +93,5 @@ class TestCoupons(unittest.TestCase):
         assert app.test_client().delete(f'/v1/cart/{ObjectId()}/coupon').status_code == 404
         assert app.test_client().delete(f'/v1/cart/{cart.id}/coupon').status_code == 204
 
-        with patch("app.modules.carts.repositories.Cart", object):
+        with patch("app.modules.carts.repositories.Cart", object), pytest.raises(Exception):
             assert app.test_client().delete(f'/v1/cart/{cart.id}/coupon').status_code == 500

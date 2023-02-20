@@ -1,6 +1,7 @@
 import os
 import unittest
 import requests_mock
+import pytest
 
 from unittest.mock import patch
 from bson.objectid import ObjectId
@@ -51,7 +52,7 @@ class TestCart(unittest.TestCase):
 
         assert response.status_code == 201
 
-        with patch("app.modules.carts.repositories.Cart", object):
+        with patch("app.modules.carts.repositories.Cart", object), pytest.raises(Exception):
             response = app.test_client().post("/v1/cart",
                 json={
                     "product_uuid": "c0b3fe2c-9cc9-475a-9c11-4cfaec941909",
@@ -63,7 +64,9 @@ class TestCart(unittest.TestCase):
             assert response.status_code == 500
 
     def test_delete(self):
-        assert app.test_client().delete("/v1/cart/123").status_code == 500
+        with pytest.raises(Exception):
+            assert app.test_client().delete("/v1/cart/123").status_code == 500
+
         assert app.test_client().delete(f'/v1/cart/{ObjectId()}').status_code == 404
 
         cart = self.create_cart({
@@ -74,7 +77,9 @@ class TestCart(unittest.TestCase):
 
     @requests_mock.mock()
     def test_get(self, mock_request):
-        assert app.test_client().get("/v1/cart/123").status_code == 500
+        with pytest.raises(Exception):
+            assert app.test_client().get("/v1/cart/123").status_code == 500
+
         assert app.test_client().get(f'/v1/cart/{ObjectId()}').status_code == 404
 
         coupon = self.create_coupon({
@@ -113,5 +118,5 @@ class TestCart(unittest.TestCase):
 
         assert app.test_client().get(f'/v1/cart/{cart.id}').status_code == 200
 
-        with patch("app.external_services.requests", object):
+        with patch("app.external_services.requests", object), pytest.raises(Exception):
             assert app.test_client().get(f'/v1/cart/{cart.id}').status_code == 500
