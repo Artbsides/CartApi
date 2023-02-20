@@ -19,7 +19,8 @@ from app.routes import load_routes
 sentry_sdk.init(
     dsn=os.getenv("SENTRY_DSN"),
     debug=int(os.getenv("FLASK_DEBUG")),
-    release="0.0.1-staging",
+    release=f'{os.getenv("APP_RELEASE")}-{os.getenv("APP_ENVIRONMENT")}',
+    environment=os.getenv("APP_ENVIRONMENT"),
     traces_sample_rate=1.0,
     integrations=[
         FlaskIntegration(),
