@@ -60,7 +60,7 @@ services:
     image: grafana/grafana:9.3.6
     container_name: cart-api_grafana
     environment:
-      GF_AUTH_ANONYMOUS_ENABLED: true
+      GF_AUTH_ANONYMOUS_ENABLED: 1
       GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
     volumes:
       - ./.monitoring/grafana/prometheus-datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
