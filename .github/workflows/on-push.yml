@@ -28,7 +28,7 @@ jobs:
 
       - name: Tests
         run: |
-          pytest
+          make tests
 
   code-convention:
     runs-on: ubuntu-22.04
@@ -51,4 +51,4 @@ jobs:
 
       - name: Code Convention
         run: |
-          flake8 main.py app tests
+          make code-convention
