@@ -20,7 +20,7 @@ sentry_sdk.init(
     dsn=os.getenv("SENTRY_DSN"),
     debug=int(os.getenv("FLASK_DEBUG")),
     release=f'{os.getenv("APP_RELEASE")}-{os.getenv("APP_ENVIRONMENT")}',
-    environment=os.getenv("SENTRY_ENVIRONMENT"),
+    environment=os.getenv("APP_ENVIRONMENT"),
     traces_sample_rate=1.0,
     integrations=[
         FlaskIntegration(),
