@@ -45,6 +45,8 @@ services:
   runner:
     <<: *app
     command: /bin/bash
+    volumes:
+      - ./:/app
 
   prometheus:
     image: prom/prometheus:v2.42.0
