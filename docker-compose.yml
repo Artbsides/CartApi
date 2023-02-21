@@ -39,8 +39,6 @@ services:
     ports:
       - ${FLASK_RUN_PORT}:${FLASK_RUN_PORT}
       - ${FLASK_DEBUGGER_PORT}:${FLASK_DEBUGGER_PORT}
-    depends_on:
-      - mongodb
 
   prometheus:
     image: prom/prometheus:v2.42.0

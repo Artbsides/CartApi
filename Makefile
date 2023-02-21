@@ -28,18 +28,15 @@ help:
 build:  ## Build api
 	@docker-compose build
 
-bash:  ## Run api bin/bash
-	@docker-compose run --rm runner
-
 seeder:  ## Seed database
-	@COMPOSE_COMMAND="python seeds/seed_*.py" docker-compose run --rm runner
+	@docker-compose run --rm cart_api python seeds/seed_*.py
 
 tests: -B  ## Run api tests
-	@COMPOSE_COMMAND="pytest --cov-report=term-missing --cov-report=html --cov=." FLASK_DEBUG=true docker-compose up cart_api
+	@FLASK_DEBUG=true docker-compose run --rm cart_api pytest --cov-report=term-missing --cov-report=html --cov=.
 
 code-convention:  ## Run code convention
-	@COMPOSE_COMMAND="flake8 main.py gunicorn.py app tests" \
-	  docker-compose up cart_api
+	@docker-compose run --rm cart_api flake8 main.py gunicorn.py app tests && \
+	  echo == Code convention is ok
 
 run:  ## Run api
 	@FLASK_DEBUGGER=false docker-compose up cart_api
