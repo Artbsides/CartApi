@@ -5,4 +5,3 @@ mongomock==4.1.2
 pytest==7.2.1
 pytest-cov==4.0.0
 requests-mock==1.10.0
-debugpy==1.6.6
