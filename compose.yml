@@ -15,6 +15,7 @@ services:
       - ${MONGODB_PORT}:${MONGODB_PORT}
 
   app: &app
+    tty: true
     build:
       context: .
     environment:
@@ -33,25 +34,31 @@ services:
 
   cart_api:
     <<: *app
+    image: cart-api:production
     container_name: cart-api
-    command: ${COMPOSE_DEBUG_COMMAND:-}
+    build:
+      target: cart-api.production
+    volumes:
+      - ./:/app
     ports:
       - ${FLASK_RUN_PORT}:${FLASK_RUN_PORT}
       - ${FLASK_DEBUGGER_PORT}:${FLASK_DEBUGGER_PORT}
     depends_on:
       - mongodb
-    volumes:
-      - ./:/app
 
   runner:
     <<: *app
-    command: /bin/bash
+    image: cart-api:tests
+    container_name: cart-api.runner
+    command: ${COMPOSE_COMMAND:-}
+    build:
+      target: cart-api.tests
     volumes:
       - ./:/app
 
   prometheus:
     image: prom/prometheus:v2.42.0
-    container_name: cart-api_prometheus
+    container_name: cart-api.prometheus
     volumes:
       - ./.monitoring/prometheus/:/etc/prometheus/
     ports:
@@ -59,7 +66,7 @@ services:
 
   grafana:
     image: grafana/grafana:9.3.6
-    container_name: cart-api_grafana
+    container_name: cart-api.grafana
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: 1
       GF_AUTH_ANONYMOUS_ORG_ROLE: Admin

@@ -1,6 +1,6 @@
-FROM python:3.10
+FROM python:3.10 AS cart-api.development
 
-WORKDIR /app
+WORKDIR /cart-api
 
 COPY requirements/* requirements/
 
@@ -9,22 +9,14 @@ RUN pip3 install -r requirements/development.txt
 
 COPY . .
 
-ENV APP_RELEASE ${APP_RELEASE}
-ENV APP_ENVIRONMENT ${APP_ENVIRONMENT}
+FROM cart-api.development AS cart-api.production
 
-ENV FLASK_DEBUG ${FLASK_DEBUG}
-ENV FLASK_RUN_PORT ${FLASK_RUN_PORT}
-ENV FLASK_RUN_HOST ${FLASK_RUN_HOST}
-ENV FLASK_DEBUGGER ${FLASK_DEBUGGER}
-ENV FLASK_DEBUGGER_PORT ${FLASK_DEBUGGER_PORT}
+WORKDIR /cart-api
+RUN pip3 install -r requirements/production.txt
 
-ENV MONGODB_URL ${MONGODB_URL}
-ENV MONGODB_NAME ${MONGODB_NAME}
+ENTRYPOINT [ "gunicorn", "-c", "gunicorn.py", "main:app" ]
 
-ENV DEBUG_METRICS true
-ENV SENTRY_DSN ${SENTRY_DSN}
+FROM cart-api.development AS cart-api.tests
 
-ENV X_API ${X_API}
-ENV X_API_KEY ${X_API_KEY}
-
-ENTRYPOINT ["gunicorn", "-c", "gunicorn.py", "main:app"]
+WORKDIR /cart-api
+RUN pip3 install -r requirements/tests.txt

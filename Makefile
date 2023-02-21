@@ -28,24 +28,27 @@ help:
 build:  ## Build api
 	@docker-compose build
 
+	@echo
+	@docker-compose -f compose.yml -f compose.development.yml build
+
 bash:  ## Run api bin/bash
 	@docker-compose run --rm runner
 
 seeder:  ## Seed database
-	@docker-compose run --rm runner python seeds/seed_*.py
+	@COMPOSE_COMMAND="python seeds/seed_*.py" docker-compose run --rm runner
 
 tests: -B  ## Run api tests
-	@docker-compose run --rm runner pytest --cov-report=term-missing --cov-report=html --cov=.
+	@COMPOSE_COMMAND="pytest --cov-report=term-missing --cov-report=html --cov=." FLASK_DEBUG=true docker-compose run --rm runner
 
 code-convention:  ## Run code convention
-	@docker-compose run --rm runner flake8 main.py app tests
+	@COMPOSE_COMMAND="flake8 main.py app tests" docker-compose run --rm runner
 	@echo == Code convention is ok
 
 run:  ## Run api
-	@FLASK_DEBUGGER=false docker-compose up cart_api
+	@docker-compose up cart_api
 
 run-debug:  ## Run api in debugger mode
-	@COMPOSE_DEBUG_COMMAND="flask run" docker-compose run --rm --service-ports cart_api flask run
+	@docker-compose -f compose.yml -f compose.development.yml up cart_api
 
 encrypt-secrets:  ## Encrypt secrets. environment=staging|production
 	@SECRETS_PATH=".k8s/$(environment)/secrets"
