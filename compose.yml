@@ -17,9 +17,9 @@ services:
   cart_api:
     image: cart-api:production
     container_name: cart-api
-    tty: true
     build:
       target: cart-api.production
+      context: .
     environment:
       APP_RELEASE: ${APP_RELEASE}
       APP_ENVIRONMENT: ${APP_ENVIRONMENT}
@@ -45,9 +45,9 @@ services:
     image: cart-api:tests
     container_name: cart-api.runner
     command: ${COMPOSE_COMMAND:-}
-    tty: true
     build:
       target: cart-api.tests
+      context: .
     environment:
       APP_RELEASE: ${APP_RELEASE}
       APP_ENVIRONMENT: ${APP_ENVIRONMENT}
