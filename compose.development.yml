@@ -4,7 +4,6 @@ services:
   cart_api:
     image: cart-api:development
     container_name: cart-api
+    command: ${COMPOSE_COMMAND:-}
     build:
-      target: cart-api.development
-      context: .
-    command: flask run
+      target: development

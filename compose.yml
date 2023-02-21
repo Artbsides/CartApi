@@ -15,10 +15,9 @@ services:
       - ${MONGODB_PORT}:${MONGODB_PORT}
 
   cart_api:
-    image: cart-api:production
+    image: cart-api
     container_name: cart-api
     build:
-      target: cart-api.production
       context: .
     environment:
       APP_RELEASE: ${APP_RELEASE}
@@ -40,29 +39,6 @@ services:
       - ${FLASK_DEBUGGER_PORT}:${FLASK_DEBUGGER_PORT}
     depends_on:
       - mongodb
-
-  runner:
-    image: cart-api:tests
-    container_name: cart-api.runner
-    command: ${COMPOSE_COMMAND:-}
-    build:
-      target: cart-api.tests
-      context: .
-    environment:
-      APP_RELEASE: ${APP_RELEASE}
-      APP_ENVIRONMENT: ${APP_ENVIRONMENT}
-      FLASK_DEBUG: ${FLASK_DEBUG}
-      FLASK_RUN_PORT: ${FLASK_RUN_PORT}
-      FLASK_RUN_HOST: ${FLASK_RUN_HOST}
-      FLASK_DEBUGGER: ${FLASK_DEBUGGER}
-      FLASK_DEBUGGER_PORT: ${FLASK_DEBUGGER_PORT}
-      MONGODB_NAME: ${MONGODB_NAME}
-      MONGODB_URL: ${MONGODB_URL}
-      SENTRY_DSN: ${SENTRY_DSN}
-      X_API: ${X_API}
-      X_API_KEY: ${X_API_KEY}
-    volumes:
-      - ./:/app
 
   prometheus:
     image: prom/prometheus:v2.42.0

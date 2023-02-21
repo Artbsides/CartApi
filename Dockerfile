@@ -1,22 +1,23 @@
-FROM python:3.10 AS cart-api.development
+FROM python:3.10 AS development
 
 WORKDIR /cart-api
 
 COPY requirements/* requirements/
 
 RUN pip3 install --upgrade pip
-RUN pip3 install -r requirements/development.txt
+RUN pip3 install -r requirements/base.txt
 
 COPY . .
 
-FROM cart-api.development AS cart-api.production
+FROM python:3.10
 
 WORKDIR /cart-api
+
+COPY requirements/* requirements/
+
+RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements/production.txt
 
+COPY . .
+
 ENTRYPOINT [ "gunicorn", "-c", "gunicorn.py", "main:app" ]
-
-FROM cart-api.development AS cart-api.tests
-
-WORKDIR /cart-api
-RUN pip3 install -r requirements/tests.txt
