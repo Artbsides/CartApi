@@ -1,4 +1,0 @@
--r development.txt
-
-gevent==22.10.2
-gunicorn==20.1.0

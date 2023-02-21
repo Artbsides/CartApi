@@ -17,6 +17,7 @@ services:
   cart_api:
     image: cart-api
     container_name: cart-api
+    command: ${COMPOSE_COMMAND:-}
     build:
       context: .
       dockerfile: Dockerfile
