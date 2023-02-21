@@ -6,4 +6,5 @@ services:
     container_name: cart-api
     build:
       target: cart-api.development
+      context: .
     command: flask run

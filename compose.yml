@@ -16,8 +16,6 @@ services:
 
   app: &app
     tty: true
-    build:
-      context: .
     environment:
       APP_RELEASE: ${APP_RELEASE}
       APP_ENVIRONMENT: ${APP_ENVIRONMENT}
@@ -38,6 +36,7 @@ services:
     container_name: cart-api
     build:
       target: cart-api.production
+      context: .
     volumes:
       - ./:/app
     ports:
@@ -53,6 +52,7 @@ services:
     command: ${COMPOSE_COMMAND:-}
     build:
       target: cart-api.tests
+      context: .
     volumes:
       - ./:/app
 
