@@ -18,7 +18,7 @@ from app.routes import load_routes
 
 sentry_sdk.init(
     dsn=os.getenv("SENTRY_DSN"),
-    debug=int(os.getenv("FLASK_DEBUG")),
+    debug=os.getenv("FLASK_DEBUG").lower() in ["1", "true"],
     release=f'{os.getenv("APP_RELEASE")}-{os.getenv("APP_ENVIRONMENT")}',
     environment=os.getenv("APP_ENVIRONMENT"),
     traces_sample_rate=1.0,
@@ -37,7 +37,7 @@ restful_api = Api(app,
     default_mediatype="application/json")
 
 
-if os.getenv("FLASK_DEBUGGER").lower() == "true":
+if os.getenv("FLASK_DEBUGGER").lower() in ["1", "true"]:
     debugger(os.getenv("FLASK_DEBUGGER_PORT"))
 
 CORS(app, resources={r"/*": {"origins": "*"}})

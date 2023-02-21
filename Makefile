@@ -45,7 +45,7 @@ run:  ## Run api
 	@FLASK_DEBUGGER=false docker-compose up cart_api
 
 run-debug:  ## Run api in debugger mode
-	@docker-compose run --rm --service-ports cart_api flask run
+	@COMPOSE_DEBUG_COMMAND="flask run" docker-compose run --rm --service-ports cart_api flask run
 
 encrypt-secrets:  ## Encrypt secrets. environment=staging|production
 	@SECRETS_PATH=".k8s/$(environment)/secrets"
