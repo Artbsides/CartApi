@@ -42,7 +42,7 @@ tests: -B  ## Run api tests
 	  docker-compose -f compose.yml -f compose.development.yml up cart_api
 
 code-convention:  ## Run code convention
-	@COMPOSE_COMMAND="flake8 main.py app tests" \
+	@COMPOSE_COMMAND="flake8 main.py gunicorn.py app tests" \
 	  docker-compose -f compose.yml -f compose.development.yml up cart_api
 
 	@echo == Code convention is ok
