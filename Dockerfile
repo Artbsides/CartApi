@@ -27,4 +27,4 @@ ENV SENTRY_DSN ${SENTRY_DSN}
 ENV X_API ${X_API}
 ENV X_API_KEY ${X_API_KEY}
 
-CMD gunicorn -c gunicorn.py main:app
+ENTRYPOINT ["gunicorn", "-c", "gunicorn.py", "main:app"]
