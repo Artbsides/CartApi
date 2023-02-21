@@ -20,7 +20,6 @@ services:
     command: ${COMPOSE_COMMAND:-}
     build:
       context: .
-      dockerfile: Dockerfile
     environment:
       APP_RELEASE: ${APP_RELEASE}
       APP_ENVIRONMENT: ${APP_ENVIRONMENT}
@@ -39,8 +38,6 @@ services:
     ports:
       - ${FLASK_RUN_PORT}:${FLASK_RUN_PORT}
       - ${FLASK_DEBUGGER_PORT}:${FLASK_DEBUGGER_PORT}
-    depends_on:
-      - mongodb
 
   prometheus:
     image: prom/prometheus:v2.42.0
