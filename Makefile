@@ -26,7 +26,11 @@ help:
 
 
 build:  ## Build api
+	@docker-compose down --volumes
 	@docker-compose build
+
+mongodb:  ## Run mongodb
+	@docker-compose up mongodb -d
 
 seeder:  ## Seed database
 	@docker-compose run --rm cart_api python seeds/seed_*.py
@@ -71,7 +75,7 @@ monitoring: -B  ## Run prometheus and grafana
 	@docker-compose up -d prometheus \
 	  grafana
 
-install: build seeder tests code-convention  ## Install api
+install: build mongodb seeder tests code-convention  ## Install api
 
 
 %:
