@@ -1,14 +1,3 @@
-FROM python:3.10 AS development
-
-WORKDIR /cart-api
-
-COPY requirements/* requirements/
-
-RUN pip3 install --upgrade pip
-RUN pip3 install -r requirements/base.txt
-
-COPY . .
-
 FROM python:3.10
 
 WORKDIR /cart-api
@@ -16,8 +5,8 @@ WORKDIR /cart-api
 COPY requirements/* requirements/
 
 RUN pip3 install --upgrade pip
-RUN pip3 install -r requirements/production.txt
+RUN pip3 install -r requirements/all-environments.txt
 
 COPY . .
 
-ENTRYPOINT [ "gunicorn", "-c", "gunicorn.py", "main:app" ]
+CMD gunicorn -c gunicorn.py main:app
