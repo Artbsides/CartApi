@@ -9,6 +9,8 @@ RUN pip3 install -r requirements/base.txt
 
 COPY . .
 
+ENTRYPOINT [ "flask", "run" ]
+
 FROM python:3.10
 
 WORKDIR /cart-api
