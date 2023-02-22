@@ -34,7 +34,7 @@ services:
       X_API: ${X_API}
       X_API_KEY: ${X_API_KEY}
     volumes:
-      - ./:/app
+      - ./:/cart-api
     ports:
       - ${FLASK_RUN_PORT}:${FLASK_RUN_PORT}
       - ${FLASK_DEBUGGER_PORT}:${FLASK_DEBUGGER_PORT}
